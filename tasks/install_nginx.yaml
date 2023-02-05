@@ -1,0 +1,35 @@
+---
+- name: Install Nginx
+  notify: Nginx_restart
+  block:
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: absent
+
+    - name: Copy unit
+      ansible.builtin.copy:
+        src: units/nginx.service
+        dest: /lib/systemd/system/nginx.service
+        mode: '644'
+
+    - name: Copy config
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: '644'
+
+    - name: Make dir for Grafana logs
+      ansible.builtin.file:
+        path: /var/log/nginx/grafana.cyberportal.one
+        mode: '755'
+
+    - name: Make dir for Prometheus logs
+      ansible.builtin.file:
+        path: /var/log/nginx/prometheus.cyberportal.one
+        mode: '755'
+
+    - name: Make dir for Nextcloud logs
+      ansible.builtin.file:
+        path: /var/log/nginx/nextcloud.cyberportal.one
+        mode: '755'

@@ -1,0 +1,25 @@
+---
+- name: Make dir for Grafana volume
+  ansible.builtin.file:
+    path: /opt/grafana
+    state: directory
+    mode: '777'
+
+- name: Install Grafana
+  notify: Grafana_restart
+  block:
+    - name: Create Grafana container
+      community.docker.docker_container:
+        name: grafana
+        image: grafana/grafana:latest
+        state: present
+        ports:
+          - 172.16.0.1:3000:3000
+        volumes:
+          - /opt/grafana:/var/lib/grafana
+
+    - name: Copy Grafana systemd service
+      ansible.builtin.copy:
+        src: units/grafana.service
+        dest: /etc/systemd/system/grafana.service
+        mode: '644'

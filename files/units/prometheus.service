@@ -1,0 +1,13 @@
+[Unit]
+Description=Prometheus Service
+After=docker.service
+Requires=docker.service
+After=wg-quick@wg0.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a prometheus
+ExecStop=/usr/bin/docker stop -t 2 prometheus
+
+[Install]
+WantedBy=multi-user.target

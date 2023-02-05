@@ -1,0 +1,22 @@
+---
+- name: Install Node Exporter
+  notify: Node_exporter_restart
+  block:
+    - name: Create nodeuser
+      ansible.builtin.user:
+        name: nodeusr
+        state: present
+        system: true
+        shell: /bin/false
+
+    - name: Copy Node Exporter binary
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/Ark4diiV/ansible/main/roles/controlNodeMonitoring/files/binary/node_exporter_amd64
+        dest: /usr/local/bin/node_exporter
+        mode: '755'
+
+    - name: Copy Node Exporter systemd service
+      ansible.builtin.template:
+        src: node_exporter.service.j2
+        dest: /etc/systemd/system/node_exporter.service
+        mode: '644'

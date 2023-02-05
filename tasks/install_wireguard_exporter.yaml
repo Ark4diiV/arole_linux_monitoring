@@ -1,0 +1,15 @@
+---
+- name: Install Wireguard exporter
+  notify: Wireguard-exporter_restart
+  block:
+    - name: Copy Wireguard Exporter binary
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/Ark4diiV/ansible/main/roles/controlNodeMonitoring/files/binary/wireguard_exporter_amd64
+        dest: /usr/local/bin/wireguard_exporter
+        mode: '755'
+
+    - name: Copy Wireguard Exporter systemd service
+      ansible.builtin.template:
+        src: wireguard.service.j2
+        dest: /etc/systemd/system/wireguard-exporter.service
+        mode: '644'

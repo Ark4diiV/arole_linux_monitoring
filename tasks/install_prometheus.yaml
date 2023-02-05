@@ -1,0 +1,38 @@
+---
+- name: Make dir for Prometheus config volume
+  ansible.builtin.file:
+    path: /opt/prometheus
+    state: directory
+    mode: '777'
+
+- name: Make dir for Prometheus data volume
+  ansible.builtin.file:
+    path: /opt/prometheus_data
+    state: directory
+    mode: '777'
+
+- name: Install Prometheus
+  notify: Prometheus_restart
+  block:
+    - name: Copy Prometheus config
+      ansible.builtin.template:
+        src: prometheus.j2
+        dest: /opt/prometheus/prometheus.yml
+        mode: '644'
+
+    - name: Copy Prometheus systemd service
+      ansible.builtin.copy:
+        src: units/prometheus.service
+        dest: /etc/systemd/system/prometheus.service
+        mode: '644'
+
+    - name: Create Prometheus container
+      community.docker.docker_container:
+        name: prometheus
+        image: prom/prometheus:latest
+        state: present
+        ports:
+          - 172.16.0.1:9090:9090
+        volumes:
+          - /opt/prometheus:/etc/prometheus
+          - /opt/prometheus_data:/prometheus

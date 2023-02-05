@@ -1,0 +1,42 @@
+---
+- name: Node_exporter_restart
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: node_exporter.service
+    state: restarted
+    enabled: true
+
+- name: Wireguard-exporter_restart
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: wireguard-exporter.service
+    state: restarted
+    enabled: true
+
+- name: Blackbox_restart
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: blackbox-exporter.service
+    state: restarted
+    enabled: true
+
+- name: Grafana_restart
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: grafana.service
+    state: restarted
+    enabled: true
+
+- name: Prometheus_restart
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: prometheus.service
+    state: restarted
+    enabled: true
+
+- name: Nginx_restart
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: nginx.service
+    state: restarted
+    enabled: true
