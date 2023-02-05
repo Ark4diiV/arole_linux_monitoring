@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Ark4diiV
-  description: Deploy monitoring
+  description: This Ansible role deploys monitoring on Linux servers node-, wireguard-, blackbox- exporters and Prometheus/Grafana.
   company: NoName
   license: MIT
   role_name: arole_linux_monitoring
